@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Timetable</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        h1 {
+            text-align: center;
+        }
+        th.sortable:hover {
+            cursor: pointer;
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>University Timetable with Grades</h1>
+
+    <table id="timetable">
+        <thead>
+            <tr>
+                <th>Course Name</th>
+                <th>Schedule</th>
+                <th>Grade</th>
+                <th class="sortable" onclick="sortTable(3)">Difficulty</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>ARHS 1050 3T Art Appreciation</td>
+                <td>Mon, Wed 10:00-11:30 AM</td>
+                <td>A</td>
+                <td>Easy</td>
+            </tr>
+            <tr>
+                <td>COSC 1560 4T FA 2024 Computer Programming - II</td>
+                <td>Tue, Thu 9:00-10:30 AM</td>
+                <td>B+</td>
+                <td>Medium</td>
+            </tr>
+            <tr>
+                <td>COSC 2610 5T FA 2024 Operating Systems</td>
+                <td>Mon, Wed 2:00-3:30 PM</td>
+                <td>A-</td>
+                <td>Hard</td>
+            </tr>
+            <tr>
+                <td>GLBC 1200 1U FA 2024</td>
+                <td>Fri 11:00-1:00 PM</td>
+                <td>B</td>
+                <td>Medium</td>
+            </tr>
+            <tr>
+                <td>ANSO 1050 UA F2 2023 Global Social Problems</td>
+                <td>Tue 1:30-3:00 PM</td>
+                <td>A</td>
+                <td>Easy</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // Function to sort the table by difficulty
+        function sortTable(columnIndex) {
+            let table = document.getElementById("timetable");
+            let rows = table.rows;
+            let switching = true;
+            let dir = "asc"; // Set the sorting direction to ascending
+            let switchCount = 0;
+
+            // Loop to continue sorting while there are switches
+            while (switching) {
+                switching = false;
+                let rowsArray = Array.from(rows).slice(1); // Convert HTMLCollection to array and skip header row
+
+                // Loop through all table rows
+                for (let i = 0; i < rowsArray.length - 1; i++) {
+                    let x = rowsArray[i].getElementsByTagName("TD")[columnIndex];
+                    let y = rowsArray[i + 1].getElementsByTagName("TD")[columnIndex];
+                    let shouldSwitch = false;
+
+                    // Compare the two rows based on difficulty
+                    if (dir === "asc" && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    } else if (dir === "desc" && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+
+                if (shouldSwitch) {
+                    // If a switch was needed, swap the rows
+                    rowsArray[i].parentNode.insertBefore(rowsArray[i + 1], rowsArray[i]);
+                    switching = true;
+                    switchCount++;
+                } else {
+                    // If no switching happened and the direction is "asc", set to "desc"
+                    if (switchCount === 0 && dir === "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
